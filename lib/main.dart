@@ -5,6 +5,11 @@ import 'package:task/src/features/auth/data/repositories/auth_repository_impl.da
 import 'package:task/src/features/auth/domain/usecases/login_usecase.dart';
 import 'package:task/src/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:task/src/features/auth/presentation/pages/auth_login_screen.dart';
+import 'package:task/src/features/products/data/repositories/product_repo_impl.dart';
+import 'package:task/src/features/products/domain/use_cases/product_usecase.dart';
+import 'package:task/src/features/products/presentation/bloc/product_bloc.dart';
+import 'package:task/src/features/products/presentation/bloc/product_event.dart';
+import 'package:task/src/features/products/presentation/view/products_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +24,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context)=>AuthBloc(loginUsecase: LoginUsecase(authRepository: AuthRepositoryImpl(client: dioClient)))),
+        BlocProvider(
+          create: (context) => ProductBloc(productUseCase: ProductUseCase(productRepository: ProductRepositoryImpl(client: dioClient)))..add(GetProductList()),
+        )
       ],
       child: MaterialApp(
         title: 'Task',
@@ -26,7 +34,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home:LoginPage(),
+        home:ProductListPage(),
       ),
     );
   }
