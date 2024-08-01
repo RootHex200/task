@@ -2,9 +2,9 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task/src/features/auth/domain/usecases/login_usecase.dart';
-import 'package:task/src/features/auth/presentation/bloc/auth_event.dart';
-import 'package:task/src/features/auth/presentation/bloc/auth_state.dart';
+import 'package:task/src/features/auth/login/domain/usecases/login_usecase.dart';
+import 'package:task/src/features/auth/login/presentation/bloc/auth_event.dart';
+import 'package:task/src/features/auth/login/presentation/bloc/auth_state.dart';
 import 'package:task/src/utils/constant/constant.dart';
 
 

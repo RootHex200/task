@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task/src/core/network_client/dio_client.dart';
-import 'package:task/src/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:task/src/features/auth/domain/usecases/login_usecase.dart';
-import 'package:task/src/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:task/src/features/auth/presentation/pages/auth_login_screen.dart';
+import 'package:task/src/features/auth/login/data/repositories/auth_repository_impl.dart';
+import 'package:task/src/features/auth/login/domain/usecases/login_usecase.dart';
+import 'package:task/src/features/auth/login/presentation/bloc/auth_bloc.dart';
+import 'package:task/src/features/auth/login/presentation/pages/auth_login_screen.dart';
 import 'package:task/src/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:task/src/features/products/data/repositories/product_repo_impl.dart';
 import 'package:task/src/features/products/domain/use_cases/product_usecase.dart';

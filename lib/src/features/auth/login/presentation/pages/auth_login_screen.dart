@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task/src/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:task/src/features/auth/presentation/bloc/auth_event.dart';
-import 'package:task/src/features/auth/presentation/bloc/auth_state.dart';
+import 'package:task/src/features/auth/login/presentation/bloc/auth_bloc.dart';
+import 'package:task/src/features/auth/login/presentation/bloc/auth_event.dart';
+import 'package:task/src/features/auth/login/presentation/bloc/auth_state.dart';
 import 'package:task/src/features/products/presentation/view/products_page.dart';
 import 'package:task/src/utils/colors/app_colors.dart';
 import 'package:task/src/utils/common/widgets/custom_button_widget.dart';
