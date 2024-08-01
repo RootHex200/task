@@ -5,11 +5,13 @@ import 'package:task/src/features/auth/login/data/repositories/auth_repository_i
 import 'package:task/src/features/auth/login/domain/usecases/login_usecase.dart';
 import 'package:task/src/features/auth/login/presentation/bloc/auth_bloc.dart';
 import 'package:task/src/features/auth/login/presentation/pages/auth_login_screen.dart';
+import 'package:task/src/features/auth/logout/data/repositories/logout_repo_impl.dart';
+import 'package:task/src/features/auth/logout/domain/use_cases/logout_use_case.dart';
+import 'package:task/src/features/auth/logout/presentation/bloc/logout_bloc.dart';
 import 'package:task/src/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:task/src/features/products/data/repositories/product_repo_impl.dart';
 import 'package:task/src/features/products/domain/use_cases/product_usecase.dart';
 import 'package:task/src/features/products/presentation/bloc/product_bloc.dart';
-import 'package:task/src/features/products/presentation/bloc/product_event.dart';
 import 'package:task/src/utils/colors/app_colors.dart';
 
 void main() {
@@ -26,9 +28,10 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context)=>AuthBloc(loginUsecase: LoginUsecase(authRepository: AuthRepositoryImpl(client: dioClient)))),
         BlocProvider(
-          create: (context) => ProductBloc(productUseCase: ProductUseCase(productRepository: ProductRepositoryImpl(client: dioClient)))..add(GetProductList()),
+          create: (context) => ProductBloc(productUseCase: ProductUseCase(productRepository: ProductRepositoryImpl(client: dioClient))),
         ),
-        BlocProvider(create: (context)=>CheckoutBloc())
+        BlocProvider(create: (context)=>CheckoutBloc()),
+        BlocProvider(create: (context)=>LogoutBloc(logoutusecase: LogoutUseCase(logoutRepository: LogoutRepoImple(client: dioClient))))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
