@@ -15,3 +15,9 @@ const haveAccountTextStyle=TextStyle(color: AppColors.textGrayColor,fontSize: 18
 const redColorSignInTextStyle=TextStyle(color: AppColors.primaryAppRedColor,fontWeight: FontWeight.bold,fontSize: 18);
 
 const fontsize17WithGrayColorTextStyle=TextStyle(color: AppColors.textGrayColor,fontWeight: FontWeight.w500,fontSize: 17);
+
+const fontsize17WithBlackColorTextStyle=TextStyle(color: AppColors.textGrayColor,fontWeight: FontWeight.bold,fontSize: 17);
+
+const fontsize17WithRedColorTextStyle=TextStyle(color: AppColors.primaryAppRedColor,fontWeight: FontWeight.bold,fontSize: 17);
+
+const fontsize20WithRedColorTextStyle=TextStyle(color: AppColors.primaryAppRedColor,fontWeight: FontWeight.bold,fontSize: 20);

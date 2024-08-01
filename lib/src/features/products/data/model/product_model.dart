@@ -101,6 +101,7 @@ class ProductModel {
     data['unit_qty'] = unitQty;
     data['category_name'] = categoryName;
     data['stockQty'] = stockQty;
+    data["productQuantity"]=productQuantity;
     return data;
   }
 

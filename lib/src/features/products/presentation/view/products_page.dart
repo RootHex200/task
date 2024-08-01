@@ -1,17 +1,42 @@
 
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task/src/features/products/data/model/product_model.dart';
 import 'package:task/src/features/products/presentation/bloc/product_bloc.dart';
 import 'package:task/src/features/products/presentation/bloc/product_event.dart';
 import 'package:task/src/features/products/presentation/bloc/product_state.dart';
+import 'package:task/src/features/checkout/presentation/view/check_out_page.dart';
+import 'package:task/src/features/products/presentation/view/components/product_item_view_widget.dart';
+import 'package:task/src/utils/common/widgets/custom_button_widget.dart';
+import 'package:task/src/utils/debouncer.dart';
+import 'package:task/src/utils/style/text_style.dart';
 
-class ProductListPage extends StatelessWidget {
-  final TextEditingController searchController = TextEditingController();
+class ProductListPage extends StatefulWidget {
 
-  ProductListPage({super.key});
+  const ProductListPage({super.key});
 
+  @override
+  State<ProductListPage> createState() => _ProductListPageState();
+}
+
+class _ProductListPageState extends State<ProductListPage> {
+  late TextEditingController searchController;
+  late Debouncer debouncer;
+
+  @override
+  void initState() {
+    searchController=TextEditingController();
+    debouncer=Debouncer(millisecond: 500);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    debouncer.cancel();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,23 +51,25 @@ class ProductListPage extends StatelessWidget {
         },
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
+             Padding(
+              padding: const EdgeInsets.only(left: 20,right: 20),
+              child: CupertinoSearchTextField(
                 controller: searchController,
-                decoration: const InputDecoration(
-                  hintText: 'Search products...',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (query) {
-                  BlocProvider.of<ProductBloc>(context).add(SearchProductByName(query: query));
+                onChanged: (query){
+                  debouncer.run(() {
+                    BlocProvider.of<ProductBloc>(context).add(SearchProductByName(query: query));
+                   });
+                   
                 },
+                padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
               ),
             ),
             Expanded(
               child: BlocBuilder<ProductBloc, ProductState>(
                 builder: (context, state) {
+                  if (state is ProductError) {
+                    return Center(child: Text(state.message));
+                  }
                   if (state is ProductLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is ProductLoaded) {
@@ -60,34 +87,7 @@ class ProductListPage extends StatelessWidget {
                             itemCount: productList.length,
                             itemBuilder: (context, index) {
                               final product = productList![index];
-                              return Card(
-                                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                child: ListTile(
-                                  
-                                  title: Text(product.name!),
-                                  subtitle: Text('\$${product.price.toString()}'),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(Icons.remove),
-                                        onPressed: () {
-                                          BlocProvider.of<ProductBloc>(context)
-                                              .add(DecrementProductQuantity(productId: product.id!));
-                                        },
-                                      ),
-                                      Text('${product.productQuantity}'),
-                                      IconButton(
-                                        icon: const Icon(Icons.add),
-                                        onPressed: () {
-                                          BlocProvider.of<ProductBloc>(context)
-                                              .add(IncrementProductQuantity(productId: product.id!));
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+                              return ProductItemViewWidget(product: product);
                             },
                           ),
                         ),
@@ -95,13 +95,21 @@ class ProductListPage extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             'Total: \$${state.totalPrice.toStringAsFixed(2)}',
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: fontsize17WithRedColorTextStyle,
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20,right: 20),
+                          child: CustomButton(
+                            
+                            txt: "ORDER", ontap: (){
+                                                        List<Map<String,dynamic>> data=(state).products.where((element) => element.productQuantity! >0).toList().map((e) => e.toJson()).toList();
+                          
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckOutPage(checkoutdata: data, totalPrice: state.totalPrice)));
+                          }),
+                        )
                       ],
                     );
-                  } else if (state is ProductError) {
-                    return Center(child: Text(state.message));
                   }
                   return Container();
                 },
@@ -109,12 +117,6 @@ class ProductListPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Perform an action such as navigating to another page
-        },
-        child: const Icon(Icons.shopping_cart),
       ),
     );
   }
