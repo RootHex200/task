@@ -15,12 +15,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoading());
       final result=await loginUsecase.login(event.email, event.password);
       result.fold((error)=>emit(AuthError(message: error.message!)), (data)async {
-        final SharedPreferences prefs = await shared_preferences;
-        prefs.setString("token",data.token!).then((bool success){
           emit(AuthLoaded(user: data));
-          return true;
-        });
-        
+          final SharedPreferences prefs = await shared_preferences;
+          await prefs.setString("token", data.token!);
       });
     });
   }
