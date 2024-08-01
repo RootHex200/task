@@ -6,6 +6,7 @@ import 'package:task/src/features/checkout/presentation/bloc/checkout_bloc.dart'
 import 'package:task/src/features/checkout/presentation/bloc/checkout_event.dart';
 import 'package:task/src/features/checkout/presentation/bloc/checkout_state.dart';
 import 'package:task/src/features/checkout/presentation/view/components/check_out_product_item_view.dart';
+import 'package:task/src/utils/colors/app_colors.dart';
 import 'package:task/src/utils/style/text_style.dart';
 
 class CheckOutPage extends StatelessWidget {
@@ -17,7 +18,13 @@ class CheckOutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<CheckoutBloc>(context).add(CheckoutProductLoadedEvent(checkoutProduct: checkoutdata,totalPrice: totalPrice));
     return Scaffold(
-      appBar: AppBar(title: const Text('Checkout Page')),
+      appBar: AppBar(
+        title: const Text("Checkout",style: appbarTextStyle,),
+        centerTitle: true,
+        backgroundColor: AppColors.primaryAppRedColor,
+        actionsIconTheme:const IconThemeData(color: AppColors.primaryWhiteColor),
+        iconTheme: const IconThemeData(color: AppColors.primaryWhiteColor),
+      ),
       body: Column(
         children: [
           Expanded(

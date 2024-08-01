@@ -8,7 +8,9 @@ import 'package:task/src/features/products/presentation/bloc/product_event.dart'
 import 'package:task/src/features/products/presentation/bloc/product_state.dart';
 import 'package:task/src/features/checkout/presentation/view/check_out_page.dart';
 import 'package:task/src/features/products/presentation/view/components/product_item_view_widget.dart';
+import 'package:task/src/utils/colors/app_colors.dart';
 import 'package:task/src/utils/common/widgets/custom_button_widget.dart';
+import 'package:task/src/utils/constant/constant.dart';
 import 'package:task/src/utils/debouncer.dart';
 import 'package:task/src/utils/style/text_style.dart';
 
@@ -40,7 +42,21 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Product List')),
+      appBar: AppBar(
+        title: const Text("Products",style: appbarTextStyle,),
+        centerTitle: true,
+        backgroundColor: AppColors.primaryAppRedColor,
+        actionsIconTheme:const IconThemeData(color: AppColors.primaryWhiteColor),
+    actions: <Widget>[
+      PopupMenuButton<int>(
+          onSelected: (item) =>0,
+          itemBuilder: (context) => [
+            const PopupMenuItem<int>(value: 0, child: Text('Logout')),
+          ],
+        ),
+    
+        ],
+      ),
       body: BlocListener<ProductBloc, ProductState>(
         listener: (context, state) {
           if (state is ProductError) {

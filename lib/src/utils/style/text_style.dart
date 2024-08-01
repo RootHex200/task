@@ -21,3 +21,9 @@ const fontsize17WithBlackColorTextStyle=TextStyle(color: AppColors.textGrayColor
 const fontsize17WithRedColorTextStyle=TextStyle(color: AppColors.primaryAppRedColor,fontWeight: FontWeight.bold,fontSize: 17);
 
 const fontsize20WithRedColorTextStyle=TextStyle(color: AppColors.primaryAppRedColor,fontWeight: FontWeight.bold,fontSize: 20);
+
+const appbarTextStyle = TextStyle(
+  fontSize: 24.0,
+  fontWeight: FontWeight.bold,
+  color: AppColors.primaryWhiteColor
+);
