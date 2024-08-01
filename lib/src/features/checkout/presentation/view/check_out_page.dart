@@ -18,48 +18,44 @@ class CheckOutPage extends StatelessWidget {
     BlocProvider.of<CheckoutBloc>(context).add(CheckoutProductLoadedEvent(checkoutProduct: checkoutdata,totalPrice: totalPrice));
     return Scaffold(
       appBar: AppBar(title: const Text('Checkout Page')),
-      body: BlocListener<CheckoutBloc, CheckoutState>(
-        listener: (context, state) {
-  
-        },
-        child: Column(
-          children: [
-            Expanded(
-              child: BlocBuilder<CheckoutBloc, CheckoutState>(
-                builder: (context, state) {
-                  if (state is CheckoutProductLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } 
-                 if (state is CheckoutProductLoaded) {
-                    List<CheckoutProductDataModel> checkoutdata=state.checkoutdata;
-                    
-                    return Column(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: checkoutdata.length,
-                            itemBuilder: (context, index) {
-                              final product = checkoutdata[index];
-                              return CheckoutProductItemView(product: product);
-                            },
-                          ),
+      body: Column(
+        children: [
+          Expanded(
+            child: BlocBuilder<CheckoutBloc, CheckoutState>(
+              builder: (context, state) {
+                
+                if (state is CheckoutProductLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } 
+               if (state is CheckoutProductLoaded) {
+                  List<CheckoutProductDataModel> checkoutdata=state.checkoutdata;
+                  print(checkoutdata.length);
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: checkoutdata.length,
+                          itemBuilder: (context, index) {
+                            final product = checkoutdata[index];
+                            return CheckoutProductItemView(product: product);
+                          },
                         ),
-                                                Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Total: \$${state.totalPrice}',
-                            style: fontsize17WithRedColorTextStyle,
-                          ),
+                      ),
+                                              Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Total: \$${state.totalPrice}',
+                          style: fontsize17WithRedColorTextStyle,
                         ),
-                      ],
-                    );
-                  }
-                  return Container();
-                },
-              ),
+                      ),
+                    ],
+                  );
+                }
+                return Container();
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

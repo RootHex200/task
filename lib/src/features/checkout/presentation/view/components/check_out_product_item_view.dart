@@ -51,7 +51,7 @@ class CheckoutProductItemView extends StatelessWidget {
                 style: fontsize17WithGrayColorTextStyle,
               ),
               Text(
-                product.stock!,
+                product.stockQty!,
                 style: fontsize17WithBlackColorTextStyle,
               )
             ],

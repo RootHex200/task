@@ -43,7 +43,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         double totalPrice=(state as CheckoutProductLoaded).totalPrice;
 
         final updatedProducts = (state as CheckoutProductLoaded).checkoutdata.map((product) {
-          if (product.id == event.productId && product.productQuantity! > 0) {
+          if (product.id == event.productId && product.productQuantity! > 1) {
 
             //update product quantity of specific product which clicked by user
             int quantity=product.productQuantity!-1;
@@ -61,18 +61,31 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     });
 
     on<RemoveChekoutProduct>((event,emit){
+      print(event.productId);
       if(state is CheckoutProductLoaded){
         double checkoutproducttotalprice=(state as CheckoutProductLoaded).totalPrice;
-        (state as CheckoutProductLoaded).checkoutdata.removeWhere((element) {
-          if(element.id==event.productId){
-
-            //calculate remove proudct price and update
-            double removeproductelementprice=double.parse(element.price!)*element.productQuantity!;
+        List<CheckoutProductDataModel> checkoutProductDataModel=[];
+        for(CheckoutProductDataModel data in (state as CheckoutProductLoaded).checkoutdata){
+          if(data.id==event.productId){
+            double removeproductelementprice=double.parse(data.price!)*data.productQuantity!;
             checkoutproducttotalprice=checkoutproducttotalprice-removeproductelementprice;
           }
-          return element.id==event.productId;
-        });
-        emit(CheckoutProductLoaded(checkoutdata: (state as CheckoutProductLoaded).checkoutdata, totalPrice: checkoutproducttotalprice));
+          if(data.id!=event.productId){
+            checkoutProductDataModel.add(data);
+          }
+        }
+        // (state as CheckoutProductLoaded).checkoutdata.removeWhere((element) {
+        //   if(element.id==event.productId){
+
+        //     //calculate remove proudct price and update
+            // double removeproductelementprice=double.parse(element.price!)*element.productQuantity!;
+            // checkoutproducttotalprice=checkoutproducttotalprice-removeproductelementprice;
+            // print(checkoutproducttotalprice);
+        //   }
+        //   return element.id==event.productId;
+        // });
+        print((state as CheckoutProductLoaded).checkoutdata);
+        emit(CheckoutProductLoaded(checkoutdata: checkoutProductDataModel, totalPrice: checkoutproducttotalprice));
       }
     });
   }
