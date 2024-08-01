@@ -49,7 +49,9 @@ class RestClient {
     _setDioInterceptorList();
 
     final standardHeaders = await _getOptions(apiType);
-
+    if (headers != null) {
+      standardHeaders.headers?.addAll(headers);
+    }
     return _dio
         .get(path, queryParameters: query, options: standardHeaders)
         .then((value) => value)
