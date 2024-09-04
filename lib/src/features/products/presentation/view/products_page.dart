@@ -28,6 +28,16 @@ class _ProductListPageState extends State<ProductListPage> {
   late TextEditingController searchController;
   late Debouncer debouncer;
 
+  // String dropdownvalue = 'Item 1';
+
+  // // List of items in our dropdown menu
+  // var items = [
+  //   'Item 1',
+  //   'Item 2',
+  //   'Item 3',
+  //   'Item 4',
+  //   'Item 5',
+  // ];
   @override
   void initState() {
     searchController = TextEditingController();
@@ -45,7 +55,6 @@ class _ProductListPageState extends State<ProductListPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -59,22 +68,29 @@ class _ProductListPageState extends State<ProductListPage> {
         actions: <Widget>[
           BlocListener<LogoutBloc, LogoutState>(
             listener: (context, state) {
-              if(state is LougutSuccessState){
-                successDialog(context,state.data!);
-                Future.delayed(const Duration(seconds: 1),(){
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const LoginScreen()), (route) => false);
+              if (state is LougutSuccessState) {
+                successDialog(context, state.data!);
+                Future.delayed(const Duration(seconds: 1), () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                      (route) => false);
                 });
               }
             },
             child: PopupMenuButton<int>(
               onSelected: (item) => 0,
               itemBuilder: (context) => [
-                 PopupMenuItem<int>(
-                  onTap: (){
-                    BlocProvider.of<LogoutBloc>(context).add(LogoutInitialEvent());
-                    BlocProvider.of<LogoutBloc>(context).add(ClickLogoutEvent());
-                  },
-                  value: 0, child: const Text('Logout')),
+                PopupMenuItem<int>(
+                    onTap: () {
+                      BlocProvider.of<LogoutBloc>(context)
+                          .add(LogoutInitialEvent());
+                      BlocProvider.of<LogoutBloc>(context)
+                          .add(ClickLogoutEvent());
+                    },
+                    value: 0,
+                    child: const Text('Logout')),
               ],
             ),
           ),
@@ -103,6 +119,45 @@ class _ProductListPageState extends State<ProductListPage> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               ),
+            ),
+            BlocBuilder<ProductBloc, ProductState>(
+              builder: (context, state) {
+                if (state is ProductError) {
+                  return Center(child: Text(state.message));
+                }
+                if (state is ProductLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is ProductLoaded) {
+                  List<String> listdata = [];
+                  for (int i = 0; i < (state).products.length; i++) {
+                    listdata.add(state.products[i].name.toString());
+                  }
+                  String dropdownvalue = listdata[0];
+                  return DropdownButton(
+                    // Initial Value
+                    value: dropdownvalue,
+
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
+
+                    // Array list of items
+                    items: listdata.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    // After selecting the desired option,it will
+                    // change button value to selected value
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownvalue = newValue!;
+                      });
+                    },
+                  );
+                }
+                return Container();
+              },
             ),
             Expanded(
               child: BlocBuilder<ProductBloc, ProductState>(

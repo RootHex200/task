@@ -42,6 +42,7 @@ dependencies:
   network:
     path: network
   shared_preferences: ^2.2.3
+  get_it: ^7.6.7
 
 dev_dependencies:
   flutter_test:

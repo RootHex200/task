@@ -14,6 +14,8 @@ class ProductItemViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController textEditingController =
+        TextEditingController(text: product.productQuantity!.toString());
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -78,9 +80,19 @@ class ProductItemViewWidget extends StatelessWidget {
                   },
                   icon: Icons.add),
               const HorizontalSpace(width: 10),
-               Text(
-                product.productQuantity!.toString(),
-                style: fontsize17WithRedColorTextStyle,
+              Container(
+                height: 30,
+                width: 50,
+                color: AppColors.primaryAppRedColor,
+                child: TextField(
+                  controller: textEditingController,
+                  onSubmitted: (value) {
+                    BlocProvider.of<ProductBloc>(context).add(
+                        IncrementProductQuantity(
+                            productId: product.id!,
+                            quantity: int.parse(value)));
+                  },
+                ),
               ),
               const HorizontalSpace(width: 10),
               ButtonClickWidgets(
@@ -89,6 +101,12 @@ class ProductItemViewWidget extends StatelessWidget {
                         .add(DecrementProductQuantity(productId: product.id!));
                   },
                   icon: Icons.remove),
+              HorizontalSpace(width: 10),
+              if (product.tradeOfferPrimary != null)
+                Text(
+                  "${product.extravalue == 0 ? "" : product.extravalue.toString()}",
+                  style: fontsize17WithRedColorTextStyle,
+                ),
             ],
           )
         ],

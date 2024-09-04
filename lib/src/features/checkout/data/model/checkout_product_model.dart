@@ -1,4 +1,3 @@
-
 class CheckoutProductDataModel {
   int? id;
   String? code;
@@ -24,8 +23,12 @@ class CheckoutProductDataModel {
   String? stockQty;
   String? tempProductPrice;
 
-  //added by dev to hadle update quantity 
+  //added by dev to hadle update quantity
   int? productQuantity;
+  int? extravalue;
+
+  //updated offer product;
+  int? offerproductvalue;
 
   CheckoutProductDataModel(
       {this.id,
@@ -51,7 +54,9 @@ class CheckoutProductDataModel {
       this.categoryName,
       this.stockQty,
       this.productQuantity,
-      this.tempProductPrice});
+      this.tempProductPrice,
+      this.extravalue,
+      this.offerproductvalue});
 
   CheckoutProductDataModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -59,7 +64,7 @@ class CheckoutProductDataModel {
     name = json['name'];
     unitId = json['unit_id'];
     price = json['price'];
-    tempProductPrice=json["price"];
+    tempProductPrice = json["price"];
     secondaryPrice = json['secondary_price'];
     packSize = json['pack_size'];
     stock = json['stock'];
@@ -77,7 +82,9 @@ class CheckoutProductDataModel {
     unitQty = json['unit_qty'];
     categoryName = json['category_name'];
     stockQty = json['stockQty'];
-    productQuantity=json["productQuantity"];
+    productQuantity = json["productQuantity"];
+    extravalue = json["extravalue"];
+    offerproductvalue = json["offerproductvalue"];
   }
 
   Map<String, dynamic> toJson() {
@@ -106,8 +113,6 @@ class CheckoutProductDataModel {
     data['stockQty'] = stockQty;
     return data;
   }
-
-
 
   // The copyWith method
   CheckoutProductDataModel copyWith({
@@ -161,5 +166,4 @@ class CheckoutProductDataModel {
       productQuantity: productQuantity ?? this.productQuantity,
     );
   }
-  
 }

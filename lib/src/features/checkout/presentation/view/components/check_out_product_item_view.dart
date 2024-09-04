@@ -1,11 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task/src/features/checkout/data/model/checkout_product_model.dart';
 import 'package:task/src/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:task/src/features/checkout/presentation/bloc/checkout_event.dart';
-import 'package:task/src/features/products/presentation/view/components/click_button._widget.dart';
 import 'package:task/src/utils/colors/app_colors.dart';
 import 'package:task/src/utils/common/widgets/space_widget.dart';
 import 'package:task/src/utils/style/text_style.dart';
@@ -69,14 +66,15 @@ class CheckoutProductItemView extends StatelessWidget {
               )
             ],
           ),
-                    Row(
+          Row(
             children: [
-               Text(
+              Text(
                 "Total (${product.price!}x${product.productQuantity!}): ",
                 style: fontsize17WithRedColorTextStyle,
               ),
               Text(
-                (double.parse(product.price!)*product.productQuantity!).toString(),
+                (double.parse(product.price!) * product.productQuantity!)
+                    .toString(),
                 style: fontsize17WithBlackColorTextStyle,
               )
             ],
@@ -86,37 +84,48 @@ class CheckoutProductItemView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(
-                
                 children: [
-                  ButtonClickWidgets(
-                      onpress: () {
-                        BlocProvider.of<CheckoutBloc>(context)
-                            .add(CheckoutProductIncreaseQuantity(productId: product.id!));
-                      },
-                      icon: Icons.add),
-                  const HorizontalSpace(width: 10),
-                   Text(
-                    product.productQuantity!.toString(),
+                  // ButtonClickWidgets(
+                  //     onpress: () {
+                  //       BlocProvider.of<CheckoutBloc>(context).add(
+                  //           CheckoutProductIncreaseQuantity(
+                  //               productId: product.id!));
+                  //     },
+                  //     icon: Icons.add),
+                  // const HorizontalSpace(width: 10),
+                  Text(
+                    "Total Product:${product.productQuantity!.toString()}",
                     style: fontsize17WithRedColorTextStyle,
                   ),
                   const HorizontalSpace(width: 10),
-                  ButtonClickWidgets(
-                      onpress: () {
-                        BlocProvider.of<CheckoutBloc>(context)
-                            .add(CheckoutProductDecreaseQuantity(productId: product.id!));
-                      },
-                      icon: Icons.remove),
+                  Text(
+                    "Offer Product: ${product.extravalue.toString()}",
+                    style: fontsize17WithRedColorTextStyle,
+                  )
+                  // ButtonClickWidgets(
+                  //     onpress: () {
+                  //       BlocProvider.of<CheckoutBloc>(context).add(
+                  //           CheckoutProductDecreaseQuantity(
+                  //               productId: product.id!));
+                  //     },
+                  //     icon: Icons.remove),
+                  // HorizontalSpace(width: 10),
                 ],
               ),
               GestureDetector(
-                onTap: (){
-                  BlocProvider.of<CheckoutBloc>(context).add(RemoveChekoutProduct(productId: product.id!));
+                onTap: () {
+                  BlocProvider.of<CheckoutBloc>(context)
+                      .add(RemoveChekoutProduct(productId: product.id!));
                 },
                 child: Container(
                   height: 30,
                   width: 30,
                   color: AppColors.primaryAppRedColor,
-                  child: const Icon(Icons.delete,color: AppColors.primaryWhiteColor,size: 25,),
+                  child: const Icon(
+                    Icons.delete,
+                    color: AppColors.primaryWhiteColor,
+                    size: 25,
+                  ),
                 ),
               )
             ],

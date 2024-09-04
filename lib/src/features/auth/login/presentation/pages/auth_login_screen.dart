@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task/src/features/auth/login/presentation/bloc/auth_bloc.dart';
 import 'package:task/src/features/auth/login/presentation/bloc/auth_event.dart';
 import 'package:task/src/features/auth/login/presentation/bloc/auth_state.dart';
@@ -8,6 +9,7 @@ import 'package:task/src/utils/colors/app_colors.dart';
 import 'package:task/src/utils/common/widgets/custom_button_widget.dart';
 import 'package:task/src/utils/common/widgets/space_widget.dart';
 import 'package:task/src/utils/common/widgets/text_field_widget.dart';
+import 'package:task/src/utils/constant/constant.dart';
 import 'package:task/src/utils/style/text_style.dart';
 import 'package:task/src/utils/validator/validator.dart';
 
@@ -26,6 +28,17 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
+
+    Future.delayed(const Duration(seconds: 1), () async {
+      final SharedPreferences prefs = await shared_preferences;
+      final data = prefs.getString("token");
+      if (data != null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => ProductListPage()),
+            (route) => false);
+      }
+    });
     super.initState();
   }
 
@@ -44,13 +57,16 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
           child: BlocListener<AuthBloc, AuthState>(
             listener: (context, state) {
-          if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
-          } else if (state is AuthLoaded) {
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProductListPage()), (route) => false);
-          }
+              if (state is AuthError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.message)),
+                );
+              } else if (state is AuthLoaded) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProductListPage()),
+                    (route) => false);
+              }
             },
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.center,
@@ -95,21 +111,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const VerticalSpace(height: 20.0),
                 BlocBuilder<AuthBloc, AuthState>(
-                  builder:(context,state) {
-                  if (state is AuthLoading) {
-                    return const CircularProgressIndicator();
-                  }
+                  builder: (context, state) {
+                    if (state is AuthLoading) {
+                      return const CircularProgressIndicator();
+                    }
                     return CustomButton(
-                    txt: 'Sign In',
-                    ontap: () {
-                      if (_formkey.currentState!.validate()) {
-                   BlocProvider.of<AuthBloc>(context).add(LoginEvent(
-                        email: emailController.text,
-                        password: passwordController.text,
-                      ));
-                      }
-                    },
-                  );
+                      txt: 'Sign In',
+                      ontap: () {
+                        if (_formkey.currentState!.validate()) {
+                          BlocProvider.of<AuthBloc>(context).add(LoginEvent(
+                            email: emailController.text,
+                            password: passwordController.text,
+                          ));
+                        }
+                      },
+                    );
                   },
                 ),
                 const VerticalSpace(height: 40.0),

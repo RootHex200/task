@@ -1,5 +1,3 @@
-
-
 import 'package:equatable/equatable.dart';
 
 abstract class ProductEvent extends Equatable {
@@ -11,8 +9,8 @@ class GetProductList extends ProductEvent {}
 
 class IncrementProductQuantity extends ProductEvent {
   final int productId;
-
-  IncrementProductQuantity({required this.productId});
+  final int? quantity;
+  IncrementProductQuantity({required this.productId, this.quantity});
 
   @override
   List<Object?> get props => [productId];
